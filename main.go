@@ -6,13 +6,6 @@ import (
 	"os"
 )
 
-type weatherData struct {
-	Name string `json:"name"`
-	Main struct {
-		Kelvin float64 `json:"temp"`
-	} `json:"main"`
-}
-
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: scrape <url>\n")
