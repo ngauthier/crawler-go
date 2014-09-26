@@ -15,7 +15,8 @@ type weatherData struct {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Printf("Usage: scrape <url>")
+		fmt.Printf("Usage: scrape <url>\n")
+		return
 	}
 	url := os.Args[1]
 	scrape(url)
