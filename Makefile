@@ -1,7 +1,7 @@
 default: build
 
 build:
-	go build -o scrape
+	go build -o crawler
 
 run: build
-	./scrape ${ARGS}
+	./crawler ${ARGS}
