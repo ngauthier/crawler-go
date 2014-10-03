@@ -19,7 +19,7 @@ type Page struct {
 }
 
 // Constructor to make a Crawler on the given host
-func NewCrawler(host string) *Crawler {
+func New(host string) *Crawler {
 	crawler := &Crawler{Host: host}
 	return crawler
 }

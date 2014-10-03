@@ -45,7 +45,7 @@ func testMethod(t *testing.T, r *http.Request, expected string) {
 func setup(t *testing.T) {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
-	crawler = NewCrawler(server.URL)
+	crawler = New(server.URL)
 	n = &NanoTest{t: t}
 }
 
