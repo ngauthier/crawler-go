@@ -1,27 +1,31 @@
-package main
+package crawler
 
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"os"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Printf("Usage: scrape <url>\n")
-		return
-	}
-	url := os.Args[1]
-	scrape(url)
+type Crawler struct {
+	Host string
 }
 
-func scrape(url string) {
-	fmt.Printf("Scraping %s\n", url)
+type Page struct {
+	Links []string
+}
 
-	doc, err := goquery.NewDocument(url)
+func NewCrawler(host string) *Crawler {
+	crawler := &Crawler{Host: host}
+	return crawler
+}
+
+func (c *Crawler) Scrape(path string) (string, error) {
+	fmt.Printf("Scraping %s%s\n", c.Host, path)
+
+	doc, err := goquery.NewDocument(c.Host + path)
 
 	if err != nil {
-		panic("Can't fetch " + url)
+		fmt.Printf("%v", err)
+		panic("Can't fetch " + path)
 	}
 
 	fmt.Printf("Scripts:\n")
@@ -38,6 +42,8 @@ func scrape(url string) {
 	for _, link := range links(doc) {
 		fmt.Printf("\t%s\n", link)
 	}
+
+	return "yay", nil
 }
 
 func scripts(doc *goquery.Document) []string {
@@ -58,4 +64,12 @@ func query(doc *goquery.Document, query string, attribute string) []string {
 		src, _ := s.Attr(attribute)
 		return src
 	})
+}
+
+func NewPage(doc *goquery.Document) *Page {
+	p := &Page{}
+
+	p.Links = links(doc)
+
+	return p
 }
