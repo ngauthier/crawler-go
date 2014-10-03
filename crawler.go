@@ -1,3 +1,6 @@
+/*
+Crawl a site and build a sitemap
+*/
 package crawler
 
 import (
@@ -5,19 +8,23 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Crawler represents a web crawler for a particular host (domain)
 type Crawler struct {
 	Host string
 }
 
+// Page is a single page and it extracts links, css, and scripts
 type Page struct {
 	Links []string
 }
 
+// Constructor to make a Crawler on the given host
 func NewCrawler(host string) *Crawler {
 	crawler := &Crawler{Host: host}
 	return crawler
 }
 
+// Scrape a site starting from the given path
 func (c *Crawler) Scrape(path string) (string, error) {
 	fmt.Printf("Scraping %s%s\n", c.Host, path)
 
@@ -46,19 +53,23 @@ func (c *Crawler) Scrape(path string) (string, error) {
 	return "yay", nil
 }
 
+// Extract script sources from a goquery document
 func scripts(doc *goquery.Document) []string {
 	return query(doc, "script[src]", "src")
 
 }
 
+// Extract style sources from a goquery document
 func styles(doc *goquery.Document) []string {
 	return query(doc, "link[type=\"text/css\"]", "href")
 }
 
+// Extract links from a goquery document
 func links(doc *goquery.Document) []string {
 	return query(doc, "a", "href")
 }
 
+// Helper to extract an attribute from all matching tags
 func query(doc *goquery.Document, query string, attribute string) []string {
 	return doc.Find(query).Map(func(i int, s *goquery.Selection) string {
 		src, _ := s.Attr(attribute)
@@ -66,6 +77,7 @@ func query(doc *goquery.Document, query string, attribute string) []string {
 	})
 }
 
+// Constructor to make a new Page by scraping a goquery Document
 func NewPage(doc *goquery.Document) *Page {
 	p := &Page{}
 
